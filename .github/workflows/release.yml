@@ -14,4 +14,4 @@ jobs:
         - uses: actions/checkout@v1
         - uses: ./wasm-action
           with:
-            token: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
