@@ -11,7 +11,9 @@ jobs:
         name: Wasm build/deploy action
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v1
-        - uses: ./wasm-action
-          with:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - 
+                uses: actions/checkout@v1
+            - 
+                uses: ./wasm-action
+                with:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
