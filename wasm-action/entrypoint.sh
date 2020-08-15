@@ -12,7 +12,7 @@ echo "{ \
     \"message\": \"new release\",\
     \"branch\": \"pages\",\
     \"content\": \"$(openssl base64 -A -in ./$REPO/main.wasm)\",\
-    \"sha\": \"$(curl -X GET $API_URL | jq .sha)\"
+    \"sha\": \"$(curl -X GET -d "{\"ref\": \"pages\"}" $API_URL | jq .sha)\"
     }" > data.txt
 
 curl \
