@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# gogio 
 
 REPO="sandbox"
 GITHUB_PATH="strosel/${REPO}"
-API_URL="https://api.github.com/repos/${GITHUB_PATH}/contents/${REPO}"
+API_URL="https://api.github.com/repos/${GITHUB_PATH}/contents/main.wasm"
 
-go build -o $REPO github.com/$GITHUB_PATH
+#go build -o $REPO github.com/$GITHUB_PATH
+gogio -target js -o $REPO github.com/$GITHUB_PATH
 
 echo "{ \
     \"message\": \"new release\",\
     \"branch\": \"pages\",\
-    \"content\": \"$(openssl base64 -A -in ./sandbox)\",\
+    \"content\": \"$(openssl base64 -A -in ./$REPO/main.wasm)\",\
     \"sha\": \"$(curl -X GET $API_URL | jq .sha)\"
     }" > data.txt
 
