@@ -15,8 +15,6 @@ echo "{ \
     \"sha\": \"$(curl -X GET "${API_URL}?ref=pages" | jq .sha)\"
     }" > data.txt
 
-cat data.txt
-
 curl \
     -X PUT \
     -H "Accept: application/vnd.github.v3+json" \
