@@ -3,16 +3,19 @@
 
 REPO="sandbox"
 GITHUB_PATH="strosel/${REPO}"
-API_URL="https://api.github.com/repos/${GITHUB_PATH}/contents/main.wasm"
+API_URL="https://api.github.com/repos/${GITHUB_PATH}"
 
-#go build -o $REPO github.com/$GITHUB_PATH
 gogio -target js -o $REPO github.com/$GITHUB_PATH
+
+SHA=$(curl -X GET \
+    "${API_URL}/git/trees/pages" | \
+    jq '.tree | map(select(.path == "main.wasm")) | .[0]? | .sha')
 
 echo "{ \
     \"message\": \"new release\",\
     \"branch\": \"pages\",\
     \"content\": \"$(openssl base64 -A -in ./$REPO/main.wasm)\",\
-    \"sha\": \"$(curl -X GET "${API_URL}?ref=pages" | jq .sha)\"
+    \"sha\": ${SHA}
     }" > data.txt
 
 curl \
@@ -21,4 +24,4 @@ curl \
     -H "Authorization: token ${GITHUB_TOKEN}" \
     -d @data.txt \
     --write-out "%{http_code}" \
-    $API_URL
+    "${API_URL}/contents/main.wasm"
