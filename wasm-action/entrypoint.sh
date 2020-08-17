@@ -18,10 +18,25 @@ echo "{ \
     \"sha\": ${SHA}
     }" > data.txt
 
-curl \
+tmp=$(mktemp)
+
+RES=$(curl \
     -X PUT \
     -H "Accept: application/vnd.github.v3+json" \
     -H "Authorization: token ${GITHUB_TOKEN}" \
     -d @data.txt \
     --write-out "%{http_code}" \
-    "${API_URL}/contents/main.wasm"
+    --output $tmp \
+    "${API_URL}/contents/main.wasm")
+
+if [ "$?" -ne 0 ]; then
+    echo "Curl error"
+    cat $tmp
+    exit 1
+fi
+
+if [ $RES -ne 200 ]; then
+    echo "HTTP error ${RES}"
+    cat $tmp
+    exit 1
+fi
